@@ -1,0 +1,8 @@
+2025-10-06 14:28:23,992 - INFO - info message
+2025-10-06 14:28:23,992 - WARNING - warning message
+2025-10-06 14:28:23,993 - ERROR - error message
+2025-10-06 14:28:23,993 - CRITICAL - critical message
+2025-10-06 14:34:21,996 - INFO - info message
+2025-10-06 14:34:21,996 - WARNING - warning message
+2025-10-06 14:34:21,996 - ERROR - error message
+2025-10-06 14:34:21,996 - CRITICAL - critical message
