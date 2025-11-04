@@ -1,0 +1,24 @@
+2025-11-04 17:19:04.334540 - Langchain: Notified and saved to summary_log.txt
+ 
+
+2025-11-04 17:19:45.497651 - Langchain: Notified and saved to summary_log.txt
+ 
+
+2025-11-04 17:20:37.426230 - Langchain: Notified and saved to summary_log.txt
+ 
+
+The study, titled "The Effects of Mindfulness on Attention and Cognitive Control in Children with ADHD," explores the impact of mindfulness practices on children diagnosed with Attention Deficit Hyperactivity Disorder (ADHD). Conducted over a 12-week period, the research involved 50 children aged 8 to 12, divided into two groups: one receiving mindfulness training and the other serving as a control group.
+
+The mindfulness group participated in weekly 30-minute sessions, focusing on breathing exercises, body scans, and guided meditations. Parents were also trained to reinforce these practices at home. The control group received standard ADHD care without mindfulness interventions.
+
+Key findings include:
+- Children in the mindfulness group showed significant improvements in attention span and impulse control compared to the control group.
+- Parents reported reduced hyperactivity and emotional outbursts in their children.
+- Neuropsychological tests revealed enhanced cognitive control and working memory in the mindfulness group.
+- The benefits were sustained over a 3-month follow-up period, suggesting long-term effects.
+
+The study concludes that mindfulness training can be a valuable complementary therapy for ADHD, improving attention and emotional regulation. However, it emphasizes the need for further research to refine techniques and assess long-term outcomes.
+
+
+
+Autogen:- Notified and saved to summary_log.txt
