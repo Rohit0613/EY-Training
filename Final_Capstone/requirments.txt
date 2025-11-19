@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+langchain>=0.0.230
+openai
+python-dotenv
+pandas
+numpy
+scikit-learn
+faiss-cpu
+sentence-transformers
+tqdm
+twilio
+streamlit
+pydantic
+python-multipart

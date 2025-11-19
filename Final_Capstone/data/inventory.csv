@@ -1,0 +1,6 @@
+item,quantity,reorder_level,price,unit,avg_daily_sales
+Rice,50,30,60.0,kg,10
+Onion,10,20,44.32,kg,8
+Tomato,5,15,29.56,kg,7
+Atta,100,40,21.53,kg,5
+potato,5,10,24.8,kg,4
