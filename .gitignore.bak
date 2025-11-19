@@ -1,0 +1,43 @@
+.env
+my-agent-app
+.coding
+testing.py
+my-agent-app2
+try3.py
+UI-Dashboard/venv/
+Agentic-AI/venv/
+EY-Training-backup
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Databases
+*.db
+*.sqlite3
+
+# Venv
+venv/
+env/
+
+# Streamlit
+*.toml
+
+# FAISS index
+*.faiss
+*.pkl
+
+# ZIP files, EXE files
+*.zip
+*.exe
+
+# Local folders (UI Dashboard, browser data)
+UI-Dashboard/
+
+# Backup folders
+EY-Training-backup/
+
+
+# ngrok
+ngrok.exe

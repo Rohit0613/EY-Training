@@ -4,10 +4,8 @@ my-agent-app
 testing.py
 my-agent-app2
 try3.py
-UI-Dashboard/venv/
 Agentic-AI/venv/
 EY-Training-backup
-
 # Python
 __pycache__/
 *.pyc
@@ -29,11 +27,9 @@ env/
 *.pkl
 
 # ZIP files, EXE files
-*.zip
 *.exe
 
 # Local folders (UI Dashboard, browser data)
-UI-Dashboard/
 
 # Backup folders
 EY-Training-backup/
@@ -41,3 +37,45 @@ EY-Training-backup/
 
 # ngrok
 ngrok.exe
+
+##############################################
+# UI-Dashboard Rules (Correct)
+##############################################
+
+# Ignore EVERYTHING inside UI-Dashboard
+UI-Dashboard/**
+# Allow python/html files that live directly inside the UI-Dashboard root
+!UI-Dashboard/*.py
+!UI-Dashboard/*.html
+
+# Allow ONLY selected folders
+!UI-Dashboard/analysis/**
+!UI-Dashboard/database/**
+!UI-Dashboard/scheduler/**
+!UI-Dashboard/scraper/**
+
+# Allow all Python files anywhere
+!UI-Dashboard/**/*.py
+
+# Allow all HTML files anywhere
+!UI-Dashboard/**/*.html
+
+# Ignore junk inside allowed folders
+UI-Dashboard/**/__pycache__/
+UI-Dashboard/**/*.db
+UI-Dashboard/**/*.sqlite3
+UI-Dashboard/**/*.log
+UI-Dashboard/**/venv/
+UI-Dashboard/**/.venv/
+UI-Dashboard/**/Cache/
+UI-Dashboard/**/GPUCache/
+UI-Dashboard/**/Local Storage/
+UI-Dashboard/**/Session Storage/
+UI-Dashboard/**/User Data/
+UI-Dashboard/**/BrowserData/
+UI-Dashboard/**/Default/
+UI-Dashboard/**/profile/
+UI-Dashboard/**/pw_profile/
+UI-Dashboard/**/amazon_profile/
+UI-Dashboard/**/user_data/
+
