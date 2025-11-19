@@ -1,0 +1,30 @@
+# logger_config.py
+import logging
+from logging.handlers import RotatingFileHandler
+
+# Create a logger
+logger = logging.getLogger("patient_health")
+logger.setLevel(logging.INFO)
+
+# Rotating file handler to avoid huge log files
+handler = RotatingFileHandler("patient_health.log", maxBytes=5*1024*1024, backupCount=3)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
+# main.py (FastAPI app)
+from fastapi import FastAPI, Request
+from logger_config import logger
+
+app = FastAPI(title="Patient Health Records API")
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    logger.info(f"API Request: {request.method} {request.url}")
+    try:
+        response = await call_next(request)
+        logger.info(f"API Response Status: {response.status_code}")
+        return response
+    except Exception as e:
+        logger.error(f"API Error: {e}")
+        raise

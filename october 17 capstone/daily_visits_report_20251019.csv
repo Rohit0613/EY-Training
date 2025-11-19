@@ -1,0 +1,2 @@
+VisitID,PatientID,DoctorID,Date,Cost,Name_x,Specialization,Name_y,Age,Gender,Condition,Month,Visits,FollowUpRequired
+V007,P004,D104,2025-10-19,1100,Dr. Pao,Pulmonologist,Avi,52,Male,Asthma,10,1,False

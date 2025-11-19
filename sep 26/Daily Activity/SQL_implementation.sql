@@ -1,0 +1,1 @@
+SELECT * from students where students.marks>90;

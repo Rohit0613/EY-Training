@@ -1,0 +1,136 @@
+
+## 2. Embeddings: turning tokens into vectors (detailed)
+
+### 2.1 From tokens to numbers
+
+Any model must convert raw input (words, punctuation, image patches) into numbers. This begins with **tokenization** and **embeddings**.
+
+* **Tokenization:** Splitting text into tokens. Tokens could be whole words, subwords, or characters. Modern systems often use subword tokenization (e.g., BPE or WordPiece) because it balances vocabulary size and coverage: it splits rare words into common subparts.
+
+* **One‑hot vectors (old idea):** A token was represented as a huge vector with a single 1 at the token index — very sparse and not useful for capturing meaning.
+
+* **Dense embeddings (modern):** Each token maps to a dense vector (e.g., length 512 or 1024) where similar words have nearby vectors. These embeddings are learned during training (or pretraining) so they capture semantic and syntactic properties.
+
+### 2.2 How embeddings are learned and used
+
+* A model starts with a lookup table: each token ID → embedding vector.
+* During training, gradients update these vectors so that the model’s loss decreases — tokens used in similar contexts move closer in vector space.
+
+**Example intuition:** "king" − "man" + "woman" ≈ "queen" (a classic property seen in embeddings: bias directions capture relationships).
+
+### 2.3 Positional encodings: giving order to tokens
+
+Transformers process tokens in parallel and lack inherent order. We add positional encodings to embeddings so the model knows the token positions:
+
+* **Sinusoidal positional encoding (original):** For position p and dimension i:
+  PE(p, 2i) = sin(p / 10000^(2i/d))
+  PE(p, 2i+1) = cos(p / 10000^(2i/d))
+
+  This produces deterministic, continuous signals that vary across positions and allow the model to learn to interpret order.
+
+* **Learned positional embeddings:** Alternatively, position indices map to learned vectors added to token embeddings. Both approaches work in practice.
+
+**Result:** The input to the Transformer is token_embedding + position_embedding for each token.
+
+---
+
+## 3. Self‑Attention mechanism (intuitive → mathematical → numeric example)
+
+### 3.1 Intuition (simple language)
+
+Self‑attention lets each token in a sequence ask: "Which other tokens should I pay attention to when forming my own representation?" Each token queries the rest of the sequence and aggregates information accordingly.
+
+Analogy: A student (token) listens to classmates (other tokens) and decides whose comment is most relevant before answering a question.
+
+### 3.2 The building blocks: Q, K, V
+
+For each token vector x, the model computes three linear projections:
+
+* Query: q = W_Q × x
+* Key:   k = W_K × x
+* Value: v = W_V × x
+
+W_Q, W_K, W_V are learned matrices. Intuitively:
+
+* **Query (q):** what this token is looking for;
+* **Key (k):** the properties of other tokens that answers may match;
+* **Value (v):** the information to pass along if a key matches the query.
+
+### 3.3 Scaled dot‑product attention (formula)
+
+For a set of queries Q, keys K, and values V (stacking token q/k/v vectors):
+
+Attention(Q,K,V) = softmax( (Q Kᵀ) / √d_k ) × V
+
+* QKᵀ computes all pairwise dot products between queries and keys (an attention score matrix).
+* √d_k (square root of key dimension) scales the raw scores for numerical stability.
+* softmax converts scores into weights that sum to 1 across the key dimension.
+* The final output is the weighted sum of values V according to those weights.
+
+### 3.4 Masking (for autoregressive generation)
+
+When generating text, the model must not peek at future tokens. We apply a triangular mask to the attention scores before softmax, setting future positions to −∞ so softmax gives them zero weight.
+
+---
+
+## 4. Numeric example — compute attention for a short sequence
+
+Sequence: ["I", "love", "cats"]
+Assume embedding dimension = 4 and key/query dimension d_k = 2 for simplicity.
+
+Let token embeddings (after linear projections) produce Q, K, V as follows (small matrices where rows are token vectors):
+
+Q = [[1, 0], [0, 1], [1, 1]]
+K = [[1, 0], [1, 1], [0, 1]]
+V = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0]]  (values are 4‑dim vectors for illustration)
+
+Step 1 — compute raw scores S = Q × Kᵀ:
+
+* Row1 × Cols: [1*1+0*0, 1*1+0*1, 1*0+0*1] = [1,1,0]
+* Row2: [0*1+1*0, 0*1+1*1, 0*0+1*1] = [0,1,1]
+* Row3: [1*1+1*0, 1*1+1*1, 1*0+1*1] = [1,2,1]
+
+S = [[1,1,0],[0,1,1],[1,2,1]]
+
+Step 2 — scale (divide by √d_k). With d_k=2, √2≈1.414:
+S_scaled ≈ [[0.707,0.707,0],[0,0.707,0.707],[0.707,1.414,0.707]]
+
+Step 3 — softmax each row to get weights W:
+
+* Row1 softmax([0.707,0.707,0]) → approx [0.422,0.422,0.156]
+* Row2 softmax([0,0.707,0.707]) → approx [0.156,0.422,0.422]
+* Row3 softmax([0.707,1.414,0.707]) → approx [0.211,0.577,0.211]
+
+Step 4 — weighted sum over V: Output = W × V
+
+* For Row1: 0.422*[1,0,0,0] + 0.422*[0,1,0,0] + 0.156*[0,0,1,0] ≈ [0.422,0.422,0.156,0]
+* For Row2: [0.156,0.422,0.422,0]
+* For Row3: [0.211,0.577,0.211,0]
+
+Interpretation: The representation for each token becomes a mixture of token values from across the sentence, weighted by relevance. For example, "love" (Row2) borrows some information from both "I" and "cats".
+
+---
+
+## 5. Multi‑Head Attention and why it helps
+
+Instead of one attention, the model runs H heads in parallel with different learned projections W_Q^h, W_K^h, W_V^h. Each head attends to different aspects (syntax, semantics, locality). The outputs are concatenated and linearly projected.
+
+Benefit: multiple views of relationships — more expressive and helpful for complex patterns.
+
+---
+
+## 6. Practical considerations and tips
+
+* **Dimension choices:** d_model (embedding length) often 512–2048 in practice; d_k is typically d_model / num_heads.
+* **Compute cost:** attention is O(n^2) in sequence length n; various efficient transformer variants exist for long inputs.
+* **Training embeddings:** often initialized randomly and trained during pretraining; you can also initialize from pretrained embeddings.
+* **Subword tokenization:** reduces out‑of‑vocabulary issues and keeps vocabulary sizes manageable.
+
+---
+
+## 7. Simple takeaways
+
+* **Embeddings** map tokens to learned vectors that capture meaning.
+* **Positional encodings** add order information.
+* **Self‑attention** computes pairwise relevance (via Q·K) and mixes values (V) accordingly.
+* **Multi‑head attention** provides different perspectives and makes the model more powerful.

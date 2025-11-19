@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simple AI Assistant</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      display: flex;
+      justify-content: center;  /* Horizontal center */
+      align-items: center;      /* Vertical center */
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+    }
+    .container {
+      text-align: center;
+    }
+    textarea {
+      width: 300px;
+      height: 100px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 6px 12px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AI Assistant</h1>
+    <form action="/ask" method="post">
+      <label for="query">Enter your query:</label><br />
+      <textarea id="query" name="query" rows="4" cols="50">{{ query }}</textarea><br />
+      <button type="submit">Ask AI</button>
+    </form>
+
+    {% if result %}
+    <h2>Response:</h2>
+    <p>{{ result }}</p>
+    {% endif %}
+  </div>
+</body>
+</html>
